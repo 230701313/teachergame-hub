@@ -1,8 +1,7 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { getPublishedQuizzes, getSubmissionsByUser } from '@/utils/quiz';
+import { getPublishedQuizzes, getSubmissionsByUser, getQuizStatus, getActiveQuizzes } from '@/utils/quiz';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,17 +12,28 @@ import AnimatedTransition from '@/components/ui/AnimatedTransition';
 
 const StudentDashboard: React.FC = () => {
   const { user } = useAuth();
-  const allQuizzes = getPublishedQuizzes();
-  const submissions = getSubmissionsByUser(user?.id || '');
+  const [allQuizzes, setAllQuizzes] = useState(getPublishedQuizzes());
+  const [submissions, setSubmissions] = useState(getSubmissionsByUser(user?.id || ''));
+  const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
   
-  // Get IDs of completed quizzes
-  const completedQuizIds = submissions.map(sub => sub.quizId);
-  
-  // Filter quizzes to those not yet completed
-  let availableQuizzes = allQuizzes.filter(quiz => !completedQuizIds.includes(quiz.id));
-  
-  // Filter available quizzes based on date constraints
+  useEffect(() => {
+    const allPublishedQuizzes = getPublishedQuizzes();
+    const userSubmissions = getSubmissionsByUser(user?.id || '');
+    const activeQuizzes = getActiveQuizzes();
+    
+    setAllQuizzes(allPublishedQuizzes);
+    setSubmissions(userSubmissions);
+    
+    // Get IDs of completed quizzes
+    const completedQuizIds = userSubmissions.map(sub => sub.quizId);
+    
+    // Filter active quizzes to those not yet completed
+    const available = activeQuizzes.filter(quiz => !completedQuizIds.includes(quiz.id));
+    setAvailableQuizzes(available);
+  }, [user]);
+
   const now = new Date();
+  
   availableQuizzes = availableQuizzes.filter(quiz => {
     // Skip if quiz has a start date that hasn't been reached yet
     if (quiz.startDate && new Date(quiz.startDate) > now) {
@@ -37,10 +47,9 @@ const StudentDashboard: React.FC = () => {
     
     return true;
   });
-  
-  // Get all teachers connected to the student
+
   const teacherIds = user?.classroomIds || [];
-  
+
   return (
     <div className="min-h-screen pb-16">
       <Navbar />

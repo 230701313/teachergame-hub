@@ -1,8 +1,7 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { getQuizzesByTeacher } from '@/utils/quiz';
+import { getQuizzesByTeacher, getActiveQuizzes, getQuizStatus } from '@/utils/quiz';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,11 +11,16 @@ import { PlusCircle, Edit, Eye, BarChart3, AlignJustify, Calendar, Users } from 
 
 const TeacherDashboard: React.FC = () => {
   const { user } = useAuth();
-  const quizzes = getQuizzesByTeacher(user?.id || '');
+  const [quizzes, setQuizzes] = useState(getQuizzesByTeacher(user?.id || ''));
   const [view, setView] = useState<'grid' | 'table'>('grid');
+
+  useEffect(() => {
+    setQuizzes(getQuizzesByTeacher(user?.id || ''));
+  }, [user]);
 
   const publishedQuizzes = quizzes.filter(quiz => quiz.published);
   const draftQuizzes = quizzes.filter(quiz => !quiz.published);
+  const activeQuizzes = quizzes.filter(quiz => getQuizStatus(quiz) === 'active');
   
   const getQuizStatus = (quiz: typeof quizzes[0]) => {
     const now = new Date();
@@ -137,11 +141,11 @@ const TeacherDashboard: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="active">
-            {renderQuizzes(quizzes.filter(q => getQuizStatus(q) === 'active'), view)}
+            {renderQuizzes(activeQuizzes, view)}
           </TabsContent>
           
           <TabsContent value="drafts">
-            {renderQuizzes(quizzes.filter(q => getQuizStatus(q) === 'draft'), view)}
+            {renderQuizzes(draftQuizzes, view)}
           </TabsContent>
           
           <TabsContent value="scheduled">
@@ -341,24 +345,6 @@ function getQuizStatusBadge(quiz: any) {
         <Badge variant="outline">{status}</Badge>
       );
   }
-}
-
-function getQuizStatus(quiz: any) {
-  const now = new Date();
-  
-  if (!quiz.published) {
-    return 'draft';
-  }
-  
-  if (quiz.startDate && new Date(quiz.startDate) > now) {
-    return 'scheduled';
-  }
-  
-  if (quiz.endDate && new Date(quiz.endDate) < now) {
-    return 'ended';
-  }
-  
-  return 'active';
 }
 
 function formatDate(dateString: string) {

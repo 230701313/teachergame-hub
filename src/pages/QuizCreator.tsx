@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { generateId, Quiz, Question, QuestionType } from '@/utils/quiz';
+import { generateId, Quiz, Question, QuestionType, addQuiz } from '@/utils/quiz';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -113,10 +114,15 @@ const QuizCreator: React.FC = () => {
       createdBy: user?.id || '',
       createdAt: new Date().toISOString(),
       questions,
-      published: publish
+      published: publish,
+      startDate: new Date().toISOString(), // Set startDate to now for published quizzes
+      endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // Default end date 30 days from now
     };
     
     console.log('Saving quiz:', newQuiz);
+    
+    // Add the quiz to our mock database
+    addQuiz(newQuiz);
     
     toast.success(publish ? 'Quiz published successfully!' : 'Quiz saved as draft');
     navigate('/dashboard');

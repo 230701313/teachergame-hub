@@ -105,7 +105,7 @@ export const MOCK_QUIZZES: Quiz[] = [
     ],
     published: true,
     startDate: '2023-02-01',
-    endDate: '2023-02-28',
+    endDate: '2025-12-31', // Extended to ensure it's active
     imageUrl: 'https://example.com/science-quiz.jpg'
   },
   {
@@ -191,4 +191,51 @@ export const calculateScore = (quiz: Quiz, answers: Record<string, number>): num
 // Generate a unique ID
 export const generateId = (): string => {
   return Math.random().toString(36).substring(2, 15);
+};
+
+// Fixed function to determine quiz status
+export const getQuizStatus = (quiz: Quiz): 'draft' | 'scheduled' | 'active' | 'ended' => {
+  const now = new Date();
+  
+  if (!quiz.published) {
+    return 'draft';
+  }
+  
+  if (quiz.startDate && new Date(quiz.startDate) > now) {
+    return 'scheduled';
+  }
+  
+  if (quiz.endDate && new Date(quiz.endDate) < now) {
+    return 'ended';
+  }
+  
+  return 'active';
+};
+
+// Function to get active quizzes (published quizzes that are currently active)
+export const getActiveQuizzes = (): Quiz[] => {
+  const now = new Date();
+  return MOCK_QUIZZES.filter(quiz => {
+    // Must be published
+    if (!quiz.published) {
+      return false;
+    }
+    
+    // If has start date, it must be in the past
+    if (quiz.startDate && new Date(quiz.startDate) > now) {
+      return false;
+    }
+    
+    // If has end date, it must be in the future
+    if (quiz.endDate && new Date(quiz.endDate) < now) {
+      return false;
+    }
+    
+    return true;
+  });
+};
+
+// Add newly created quizzes to our mock database
+export const addQuiz = (quiz: Quiz): void => {
+  MOCK_QUIZZES.push(quiz);
 };
