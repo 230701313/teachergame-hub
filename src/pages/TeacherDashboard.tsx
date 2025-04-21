@@ -22,24 +22,6 @@ const TeacherDashboard: React.FC = () => {
   const draftQuizzes = quizzes.filter(quiz => !quiz.published);
   const activeQuizzes = quizzes.filter(quiz => getQuizStatus(quiz) === 'active');
   
-  const getQuizStatus = (quiz: typeof quizzes[0]) => {
-    const now = new Date();
-    
-    if (!quiz.published) {
-      return 'draft';
-    }
-    
-    if (quiz.startDate && new Date(quiz.startDate) > now) {
-      return 'scheduled';
-    }
-    
-    if (quiz.endDate && new Date(quiz.endDate) < now) {
-      return 'ended';
-    }
-    
-    return 'active';
-  };
-
   return (
     <div className="min-h-screen pb-16">
       <Navbar />
