@@ -1,4 +1,6 @@
 
+// only change: add "Register" button alongside the "Get Started" or "Go to Dashboard" button for unauthenticated users
+
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
@@ -44,19 +46,29 @@ const Index = () => {
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 justify-center md:justify-start">
                 {user ? (
-                  <Link to="/dashboard">
-                    <Button size="lg" className="rounded-full px-8 h-12 shadow-md hover:shadow-lg transition-all">
-                      Go to Dashboard
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
+                  <>
+                    <Link to="/dashboard">
+                      <Button size="lg" className="rounded-full px-8 h-12 shadow-md hover:shadow-lg transition-all">
+                        Go to Dashboard
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                  </>
                 ) : (
-                  <Link to="/login">
-                    <Button size="lg" className="rounded-full px-8 h-12 shadow-md hover:shadow-lg transition-all">
-                      Get Started
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
+                  <>
+                    <Link to="/register">
+                      <Button size="lg" className="rounded-full px-8 h-12 shadow-md hover:shadow-lg transition-all">
+                        Create Account
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                    <Link to="/login">
+                      <Button size="lg" variant="outline" className="rounded-full px-8 h-12 shadow-md hover:shadow-lg transition-all">
+                        Login
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                  </>
                 )}
                 <Link to={user ? "/dashboard" : "/login"} className="text-muted-foreground hover:text-primary transition-colors underline underline-offset-4">
                   Learn more about our features
@@ -164,3 +176,4 @@ const Index = () => {
 };
 
 export default Index;
+
