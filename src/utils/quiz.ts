@@ -1,3 +1,4 @@
+
 export type QuestionType = 'multiple-choice' | 'true-false' | 'fill-in-blank';
 
 export interface Question {
@@ -43,6 +44,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '1-1',
         text: 'What is 2 + 2?',
+        type: 'multiple-choice',
         options: ['3', '4', '5', '6'],
         correctOption: 1, // 0-indexed, so 1 means second option (4)
         imageUrl: 'https://example.com/math-question.jpg'
@@ -50,6 +52,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '1-2',
         text: 'What is 5 × 7?',
+        type: 'multiple-choice',
         options: ['30', '35', '40', '45'],
         correctOption: 1,
         imageUrl: 'https://example.com/math-question.jpg'
@@ -57,6 +60,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '1-3',
         text: 'What is the square root of 64?',
+        type: 'multiple-choice',
         options: ['6', '7', '8', '9'],
         correctOption: 2,
         imageUrl: 'https://example.com/math-question.jpg'
@@ -77,6 +81,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '2-1',
         text: 'What is the chemical formula for water?',
+        type: 'multiple-choice',
         options: ['H2O', 'CO2', 'NaCl', 'O2'],
         correctOption: 0,
         imageUrl: 'https://example.com/science-question.jpg'
@@ -84,6 +89,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '2-2',
         text: 'Which planet is known as the Red Planet?',
+        type: 'multiple-choice',
         options: ['Earth', 'Venus', 'Mars', 'Jupiter'],
         correctOption: 2,
         imageUrl: 'https://example.com/science-question.jpg'
@@ -91,6 +97,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '2-3',
         text: 'What is the largest organ in the human body?',
+        type: 'multiple-choice',
         options: ['Heart', 'Liver', 'Brain', 'Skin'],
         correctOption: 3,
         imageUrl: 'https://example.com/science-question.jpg'
@@ -111,6 +118,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '3-1',
         text: 'Who was the first President of the United States?',
+        type: 'multiple-choice',
         options: ['Thomas Jefferson', 'George Washington', 'John Adams', 'Benjamin Franklin'],
         correctOption: 1,
         imageUrl: 'https://example.com/history-question.jpg'
@@ -118,6 +126,7 @@ export const MOCK_QUIZZES: Quiz[] = [
       {
         id: '3-2',
         text: 'In which year did World War II end?',
+        type: 'multiple-choice',
         options: ['1943', '1944', '1945', '1946'],
         correctOption: 2,
         imageUrl: 'https://example.com/history-question.jpg'

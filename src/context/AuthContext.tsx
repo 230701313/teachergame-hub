@@ -29,10 +29,15 @@ interface AuthContextType {
   getTeachers: () => User[];
 }
 
+// Define a type for users with passwords
+interface UserWithPassword extends User {
+  password: string;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock users for demonstration
-const MOCK_USERS = [
+const MOCK_USERS: UserWithPassword[] = [
   { 
     id: '1', 
     name: 'Teacher Smith', 
@@ -76,7 +81,7 @@ const MOCK_USERS = [
 ];
 
 // In-memory storage for users (would be a database in production)
-let USERS = [...MOCK_USERS];
+let USERS: UserWithPassword[] = [...MOCK_USERS];
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -163,7 +168,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       
       // Create new user
-      const newUser: User & { password: string } = {
+      const newUser: UserWithPassword = {
         id: Date.now().toString(),
         name,
         email,
@@ -171,8 +176,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         role,
         isActive: true,
         lastActive: new Date().toISOString(),
-        classroomIds: role === 'student' ? [] : undefined,
-        studentIds: role === 'teacher' ? [] : undefined
+        ...(role === 'student' ? { classroomIds: [] } : { studentIds: [] })
       };
       
       // Add to users

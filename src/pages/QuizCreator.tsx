@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { generateId, Quiz, Question } from '@/utils/quiz';
+import { generateId, Quiz, Question, QuestionType } from '@/utils/quiz';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,6 +23,7 @@ const QuizCreator: React.FC = () => {
     {
       id: generateId(),
       text: '',
+      type: 'multiple-choice',
       options: ['', '', '', ''],
       correctOption: 0
     }
@@ -35,6 +35,7 @@ const QuizCreator: React.FC = () => {
       {
         id: generateId(),
         text: '',
+        type: 'multiple-choice',
         options: ['', '', '', ''],
         correctOption: 0
       }
@@ -115,7 +116,6 @@ const QuizCreator: React.FC = () => {
       published: publish
     };
     
-    // In a real app, this would be an API call
     console.log('Saving quiz:', newQuiz);
     
     toast.success(publish ? 'Quiz published successfully!' : 'Quiz saved as draft');
