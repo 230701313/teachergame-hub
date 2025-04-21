@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -39,7 +38,7 @@ const QuizView: React.FC = () => {
   useEffect(() => {
     if (quizStarted && !quizCompleted) {
       // Set a timer of 30 seconds per question
-      const totalTime = quiz?.questions.length || 0 * 30;
+      const totalTime = (quiz?.questions.length || 0) * 30;
       setTimeLeft(totalTime);
       
       const timer = setInterval(() => {
