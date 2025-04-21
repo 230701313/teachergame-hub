@@ -1,13 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { getPublishedQuizzes, getSubmissionsByUser, getQuizStatus, getActiveQuizzes } from '@/utils/quiz';
+import { getPublishedQuizzes, getSubmissionsByUser, getActiveQuizzes } from '@/utils/quiz';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/layout/Navbar';
-import { CheckCircle, ListTodo, BarChart3, Clock, Eye, Users, Calendar } from 'lucide-react';
+import { CheckCircle, ListTodo, Clock, Eye, Users, Calendar } from 'lucide-react';
 import AnimatedTransition from '@/components/ui/AnimatedTransition';
 
 const StudentDashboard: React.FC = () => {
@@ -15,38 +16,37 @@ const StudentDashboard: React.FC = () => {
   const [allQuizzes, setAllQuizzes] = useState(getPublishedQuizzes());
   const [submissions, setSubmissions] = useState(getSubmissionsByUser(user?.id || ''));
   const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
-  
+
   useEffect(() => {
+    const now = new Date();
+
     const allPublishedQuizzes = getPublishedQuizzes();
     const userSubmissions = getSubmissionsByUser(user?.id || '');
     const activeQuizzes = getActiveQuizzes();
-    
+
     setAllQuizzes(allPublishedQuizzes);
     setSubmissions(userSubmissions);
-    
+
     // Get IDs of completed quizzes
     const completedQuizIds = userSubmissions.map(sub => sub.quizId);
-    
-    // Filter active quizzes to those not yet completed
-    const available = activeQuizzes.filter(quiz => !completedQuizIds.includes(quiz.id));
+
+    // Filter active quizzes to those not yet completed and respecting start/end dates
+    const available = activeQuizzes.filter(quiz => {
+      if (completedQuizIds.includes(quiz.id)) {
+        return false;
+      }
+
+      if (quiz.startDate && new Date(quiz.startDate) > now) {
+        return false;
+      }
+      if (quiz.endDate && new Date(quiz.endDate) < now) {
+        return false;
+      }
+      return true;
+    });
+
     setAvailableQuizzes(available);
   }, [user]);
-
-  const now = new Date();
-  
-  availableQuizzes = availableQuizzes.filter(quiz => {
-    // Skip if quiz has a start date that hasn't been reached yet
-    if (quiz.startDate && new Date(quiz.startDate) > now) {
-      return false;
-    }
-    
-    // Skip if quiz has an end date that has already passed
-    if (quiz.endDate && new Date(quiz.endDate) < now) {
-      return false;
-    }
-    
-    return true;
-  });
 
   const teacherIds = user?.classroomIds || [];
 
@@ -339,3 +339,4 @@ function formatDate(dateString: string) {
 }
 
 export default StudentDashboard;
+
