@@ -28,7 +28,6 @@ const QuizView: React.FC = () => {
   const quiz = getQuizById(quizId || '');
   
   useEffect(() => {
-    // If quiz doesn't exist, redirect to dashboard
     if (!quiz) {
       toast.error('Quiz not found');
       navigate('/dashboard');
@@ -37,7 +36,6 @@ const QuizView: React.FC = () => {
   
   useEffect(() => {
     if (quizStarted && !quizCompleted) {
-      // Set a timer of 30 seconds per question
       const totalTime = (quiz?.questions.length || 0) * 30;
       setTimeLeft(totalTime);
       
@@ -90,11 +88,9 @@ const QuizView: React.FC = () => {
   };
   
   const submitQuiz = () => {
-    // Calculate score
     const calculatedScore = calculateScore(quiz, answers);
     setScore(calculatedScore);
     
-    // In a real app, submit to API
     const submission = {
       id: generateId(),
       quizId: quiz.id,
@@ -265,9 +261,9 @@ const QuizView: React.FC = () => {
             <div className="text-sm text-muted-foreground">
               Question {currentQuestion + 1} of {quiz.questions.length}
             </div>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Clock className="h-4 w-4 mr-1" />
-              {formatTime(timeLeft)}
+            <div className="flex items-center text-sm font-semibold bg-primary/10 px-3 py-1.5 rounded-full">
+              <Clock className="h-4 w-4 mr-1.5 text-primary" />
+              <span className="text-primary">{formatTime(timeLeft)}</span>
             </div>
           </div>
           
@@ -348,6 +344,16 @@ const QuizView: React.FC = () => {
                   aria-label={`Go to question ${index + 1}`}
                 />
               ))}
+            </div>
+          </div>
+          
+          <div className="mt-6 bg-primary/5 rounded-xl p-4 flex items-center justify-center">
+            <div className="flex items-center space-x-2">
+              <Clock className="h-5 w-5 text-primary" />
+              <div>
+                <p className="text-sm font-semibold text-primary">Time Remaining</p>
+                <p className="text-2xl font-bold text-primary">{formatTime(timeLeft)}</p>
+              </div>
             </div>
           </div>
         </div>
