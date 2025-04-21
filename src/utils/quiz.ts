@@ -1,9 +1,12 @@
+export type QuestionType = 'multiple-choice' | 'true-false' | 'fill-in-blank';
 
 export interface Question {
   id: string;
   text: string;
+  type: QuestionType;
   options: string[];
   correctOption: number;
+  imageUrl?: string;
 }
 
 export interface Quiz {
@@ -14,6 +17,9 @@ export interface Quiz {
   createdAt: string;
   questions: Question[];
   published: boolean;
+  startDate?: string;
+  endDate?: string;
+  imageUrl?: string;
 }
 
 export interface QuizSubmission {
@@ -38,22 +44,28 @@ export const MOCK_QUIZZES: Quiz[] = [
         id: '1-1',
         text: 'What is 2 + 2?',
         options: ['3', '4', '5', '6'],
-        correctOption: 1 // 0-indexed, so 1 means second option (4)
+        correctOption: 1, // 0-indexed, so 1 means second option (4)
+        imageUrl: 'https://example.com/math-question.jpg'
       },
       {
         id: '1-2',
         text: 'What is 5 × 7?',
         options: ['30', '35', '40', '45'],
-        correctOption: 1
+        correctOption: 1,
+        imageUrl: 'https://example.com/math-question.jpg'
       },
       {
         id: '1-3',
         text: 'What is the square root of 64?',
         options: ['6', '7', '8', '9'],
-        correctOption: 2
+        correctOption: 2,
+        imageUrl: 'https://example.com/math-question.jpg'
       }
     ],
-    published: true
+    published: true,
+    startDate: '2023-01-01',
+    endDate: '2023-01-31',
+    imageUrl: 'https://example.com/math-quiz.jpg'
   },
   {
     id: '2',
@@ -66,22 +78,28 @@ export const MOCK_QUIZZES: Quiz[] = [
         id: '2-1',
         text: 'What is the chemical formula for water?',
         options: ['H2O', 'CO2', 'NaCl', 'O2'],
-        correctOption: 0
+        correctOption: 0,
+        imageUrl: 'https://example.com/science-question.jpg'
       },
       {
         id: '2-2',
         text: 'Which planet is known as the Red Planet?',
         options: ['Earth', 'Venus', 'Mars', 'Jupiter'],
-        correctOption: 2
+        correctOption: 2,
+        imageUrl: 'https://example.com/science-question.jpg'
       },
       {
         id: '2-3',
         text: 'What is the largest organ in the human body?',
         options: ['Heart', 'Liver', 'Brain', 'Skin'],
-        correctOption: 3
+        correctOption: 3,
+        imageUrl: 'https://example.com/science-question.jpg'
       }
     ],
-    published: true
+    published: true,
+    startDate: '2023-02-01',
+    endDate: '2023-02-28',
+    imageUrl: 'https://example.com/science-quiz.jpg'
   },
   {
     id: '3',
@@ -94,16 +112,21 @@ export const MOCK_QUIZZES: Quiz[] = [
         id: '3-1',
         text: 'Who was the first President of the United States?',
         options: ['Thomas Jefferson', 'George Washington', 'John Adams', 'Benjamin Franklin'],
-        correctOption: 1
+        correctOption: 1,
+        imageUrl: 'https://example.com/history-question.jpg'
       },
       {
         id: '3-2',
         text: 'In which year did World War II end?',
         options: ['1943', '1944', '1945', '1946'],
-        correctOption: 2
+        correctOption: 2,
+        imageUrl: 'https://example.com/history-question.jpg'
       }
     ],
-    published: false // Draft quiz
+    published: false, // Draft quiz
+    startDate: '2023-03-01',
+    endDate: '2023-03-31',
+    imageUrl: 'https://example.com/history-quiz.jpg'
   }
 ];
 
