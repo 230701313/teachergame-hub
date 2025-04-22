@@ -9,7 +9,182 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      answers: {
+        Row: {
+          answer_text: string
+          id: string
+          is_correct: boolean | null
+          question_id: string | null
+        }
+        Insert: {
+          answer_text: string
+          id?: string
+          is_correct?: boolean | null
+          question_id?: string | null
+        }
+        Update: {
+          answer_text?: string
+          id?: string
+          is_correct?: boolean | null
+          question_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      questions: {
+        Row: {
+          id: string
+          points: number
+          question_text: string
+          question_type: string
+          quiz_id: string | null
+        }
+        Insert: {
+          id?: string
+          points?: number
+          question_text: string
+          question_type: string
+          quiz_id?: string | null
+        }
+        Update: {
+          id?: string
+          points?: number
+          question_text?: string
+          question_type?: string
+          quiz_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          id: string
+          subject: string
+          teacher_id: string | null
+          title: string
+        }
+        Insert: {
+          id?: string
+          subject: string
+          teacher_id?: string | null
+          title: string
+        }
+        Update: {
+          id?: string
+          subject?: string
+          teacher_id?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_quiz_results: {
+        Row: {
+          id: string
+          quiz_id: string | null
+          score: number | null
+          student_id: string | null
+          taken_at: string | null
+        }
+        Insert: {
+          id?: string
+          quiz_id?: string | null
+          score?: number | null
+          student_id?: string | null
+          taken_at?: string | null
+        }
+        Update: {
+          id?: string
+          quiz_id?: string | null
+          score?: number | null
+          student_id?: string | null
+          taken_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_quiz_results_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_quiz_results_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          email: string
+          id: string
+          name: string
+          teacher_id: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          name: string
+          teacher_id?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          name?: string
+          teacher_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "students_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teachers: {
+        Row: {
+          email: string
+          id: string
+          name: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          name: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
